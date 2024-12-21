@@ -27,7 +27,7 @@ manage.py migrate
 manage.py createsuperuser
 manage.py createsuperuser --noinput --username admin --email admin@fuf.me
 
-DJANGO_SUPERUSER_PASSWORD=ammin ./manage.py createsuperuser \
+DJANGO_SUPERUSER_PASSWORD=nimda ./manage.py createsuperuser \
     --no-input \
     --username=admin \
     --email=admin@fuf.me
