@@ -31,6 +31,8 @@ DJANGO_SUPERUSER_PASSWORD=nimda ./manage.py createsuperuser \
     --no-input \
     --username=admin \
     --email=admin@fuf.me
+
+python manage.py runserver
 ```
     """
     'DEFAULT_AUTHENTICATION_CLASSES': [

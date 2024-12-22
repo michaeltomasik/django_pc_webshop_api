@@ -1,7 +1,7 @@
 from rest_framework import serializers 
 from api.models import Todo
 
-class TodoSerializer(serializers.ModelSerializer):
+class AdminTodoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Todo
@@ -9,3 +9,12 @@ class TodoSerializer(serializers.ModelSerializer):
                 'title',
                 'description',
                 'completed')
+
+
+class UserTodoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Todo
+        fields = ('id',
+                'title',
+                'description')
