@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -94,10 +95,18 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# Get key from .env
+load_dotenv()
+DATABASE_ADMIN_PASSWORD = os.getenv('DATABASE_ADMIN_PASSWORD')
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "django_pc_shop_api",
+        "USER": "shop_api_admin",
+        "PASSWORD": DATABASE_ADMIN_PASSWORD,
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
 
@@ -126,11 +135,16 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     ),
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+'DEFAULT_AUTHENTICATION_CLASSES': [
+    'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+],
 }
 
 REDOC_SETTINGS = {
     'LAZY_RENDERING': False,
 }
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
