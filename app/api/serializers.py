@@ -1,7 +1,7 @@
 from rest_framework import serializers 
-from .models import Todo
+#from .models import Todo
 
-class AdminTodoSerializer(serializers.ModelSerializer):
+"""class AdminTodoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Todo
@@ -17,4 +17,4 @@ class UserTodoSerializer(serializers.ModelSerializer):
         model = Todo
         fields = ('id',
                 'title',
-                'description')
+                'description')"""

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles', # required for serving swagger ui's css/js files
+    'django_extensions',
     # Django REST framework , swagger
     'rest_framework',
     'drf_yasg',
@@ -53,7 +54,9 @@ INSTALLED_APPS = [
     'corsheaders',
 
     #OWN APPS
-    'api.apps.ApiConfig',
+    'orders.apps.OrdersConfig',
+    'pc_components.apps.PcComponentsConfig',
+    'users.apps.UsersConfig'
 ]
 
 MIDDLEWARE = [

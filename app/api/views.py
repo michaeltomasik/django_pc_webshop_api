@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+"""from django.http import HttpResponse
 from django.http.response import JsonResponse
 from rest_framework import generics, views, status
 from rest_framework.response import Response
@@ -57,4 +57,4 @@ class TodoCustomCompleted(mixins.ListModelMixin,
     permission_classes = (IsAdminOnly, )
     serializer_class = AdminTodoSerializer
     def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+        return self.list(request, *args, **kwargs)"""
