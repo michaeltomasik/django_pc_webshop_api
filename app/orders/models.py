@@ -9,12 +9,14 @@ class Order(models.Model):
     payment_method = models.CharField(max_length=50)
     payment_status = models.CharField(max_length=20)
 
+    def __str__(self):
+        return self.id
+
 class Order_Item(models.Model):
     ORDER_TYPE_CHOICES = [
         ('pc', 'PC'),
         ('component', 'Component'),
     ]
-
     id = models.AutoField(primary_key=True)
     order_id = models.ForeignKey(Order, on_delete=models.CASCADE)
     pc_id = models.ForeignKey('pc_components.Pc', blank=True, null=True, on_delete=models.CASCADE)
@@ -22,6 +24,11 @@ class Order_Item(models.Model):
     order_type = models.CharField(max_length=9, choices=ORDER_TYPE_CHOICES)
     quantity = models.IntegerField()
 
+    def __str__(self):
+        if self.order_type == 'pc':
+            return f"PC: {self.pc_id.name} - Quantity: {self.quantity}"
+        elif self.order_type == 'component':
+            return f"Component: {self.component_id.name} - Quantity: {self.quantity}"
 
 
 

@@ -9,6 +9,10 @@ class Component(models.Model):
     description = models.TextField()
     technical_details = models.TextField()
 
+    def __str__(self):
+        return f"{self.name} - ({self.type}) - ({self.manufacturer})"
+
+
 class Pc(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -16,7 +20,13 @@ class Pc(models.Model):
     is_customized = models.BooleanField()
     components = models.ManyToManyField('Component', through='Pc_Components')
 
+    def __str__(self):
+        return f"{self.name} (Customized: {self.is_customized})"
+
+
 class Pc_Components(models.Model):
     pc = models.ForeignKey(Pc, on_delete=models.CASCADE)
     component = models.ForeignKey(Component, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.pc.name} - {self.component.name}"
