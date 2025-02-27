@@ -2,6 +2,7 @@ from enum import unique
 
 from django.db import models
 from psycopg2 import DATETIME
+from django.contrib.auth.hashers import make_password, check_password
 
 
 class User(models.Model):
@@ -15,6 +16,12 @@ class User(models.Model):
     def __str__(self):
         return self.username
 
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
+
 
 class User_Pc(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -22,6 +29,8 @@ class User_Pc(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.pc.id}"
+
+
 
 
 
