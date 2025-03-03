@@ -16,12 +16,6 @@ class User(models.Model):
     def __str__(self):
         return self.username
 
-    def set_password(self, raw_password):
-        self.password = make_password(raw_password)
-
-    def check_password(self, raw_password):
-        return check_password(raw_password, self.password)
-
 
 class User_Pc(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

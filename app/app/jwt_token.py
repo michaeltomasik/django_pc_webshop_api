@@ -52,3 +52,6 @@ def get_access_token_refreshed(refresh_token):
         return response.json()
     else:
         return {"error": f"Request failed with status {response.status_code}"}
+
+
+# Probably not needed. Default in Django.
