@@ -5,7 +5,7 @@ from ..pc_components import serializers
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
-    pcs = serializers.PcSerializer(many=True)
+    pcs = serializers.PcSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
