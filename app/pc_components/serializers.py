@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from models import Component, Pc
+from .models import Component, Pc
 
 class ComponentSerializer(serializers.ModelSerializer):
 
@@ -9,7 +9,7 @@ class ComponentSerializer(serializers.ModelSerializer):
 
 
 class PcSerializer(serializers.ModelSerializer):
-    components = ComponentSerializer(many=True, read_only=True)
+    components = serializers.PrimaryKeyRelatedField(queryset=Component.objects.all(), many=True)
 
     class Meta:
         model = Pc

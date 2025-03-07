@@ -5,7 +5,12 @@ class Component(models.Model):
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=50)
     manufacturer = models.CharField(max_length=70)
-    price = models.FloatField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=3, choices=[
+        ('EUR', 'Euro'),
+        ('USD', 'US-Dollar'),
+        ('GBP', 'British Pound'),
+    ], default = 'EUR')
     description = models.TextField()
     technical_details = models.TextField()
 
@@ -14,7 +19,7 @@ class Component(models.Model):
 
 
 class Pc(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
     is_customized = models.BooleanField()

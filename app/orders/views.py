@@ -1,8 +1,8 @@
 from rest_framework import viewsets
-from models import Order, Order_Item
-from serializers import OrderSerializer, Order_ItemSerializer
+from .models import Order, Order_Item
+from .serializers import OrderSerializer, Order_ItemSerializer
 from rest_framework.permissions import IsAuthenticated
-from ..users.permissions import IsOwner
+from users.permissions import IsOwner
 
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -10,6 +10,9 @@ class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated, IsOwner]
     ordering = ['created_at']
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class Order_ItemViewSet(viewsets.ModelViewSet):

@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from models import User
+from .models import User
 from django.contrib.auth.hashers import make_password
-from ..pc_components import serializers
+from pc_components import serializers as pc_serializers
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
-    pcs = serializers.PcSerializer(many=True, read_only=True)
+    pcs = pc_serializers.PcSerializer(many=True, read_only=True)
 
     class Meta:
         model = User

@@ -1,8 +1,8 @@
 from rest_framework import viewsets
-from models import Component, Pc
-from serializers import ComponentSerializer, PcSerializer
+from .models import Component, Pc
+from .serializers import ComponentSerializer, PcSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from permissions import IsPcOwnerOrCustomizedFalse # Not needed currently
+from .permissions import IsPcOwnerOrCustomizedFalse # Not needed currently
 
 
 class ComponentViewSet(viewsets.ModelViewSet):
@@ -16,3 +16,4 @@ class PcViewSet(viewsets.ModelViewSet):
     serializer_class = PcSerializer
     permission_classes = [AllowAny]   # IsPcOwnerOrCustomizedFalse if customized pcs should be private to the user. (Needs change, foreign key to user needs to be added.)
     ordering = ['name']
+

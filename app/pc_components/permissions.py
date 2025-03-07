@@ -10,6 +10,7 @@ class IsPcOwnerOrCustomizedFalse(BasePermission):
         if obj.is_customized == False:
             return True
         if obj.is_customized == True:
-            if obj.owner == request.user: # Owner would need to be the Foreign key from user.
+            if obj.id == request.user.id: # Owner would need to be the Foreign key from user.
                 return True
         return False
+

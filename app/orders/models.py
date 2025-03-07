@@ -8,6 +8,12 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     payment_method = models.CharField(max_length=50)
     payment_status = models.CharField(max_length=20)
+    currency = models.CharField(max_length=3, choices=[
+        ('EUR', 'Euro'),
+        ('USD', 'US-Dollar'),
+        ('GBP', 'British Pound'),
+    ], default='EUR')
+
 
     def __str__(self):
         return self.id
