@@ -8,8 +8,8 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     pcs = models.ManyToManyField('pc_components.Pc', through='User_Pc')
-
     REQUIRED_FIELDS = ['email']
+
     def __str__(self):
         return self.username
 

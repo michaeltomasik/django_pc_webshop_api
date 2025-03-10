@@ -16,7 +16,7 @@ class Order(models.Model):
 
 
     def __str__(self):
-        return self.id
+        return f"Order {self.id}"
 
 class Order_Item(models.Model):
     ORDER_TYPE_CHOICES = [
