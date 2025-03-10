@@ -144,6 +144,12 @@ REST_FRAMEWORK = {
 
 }
 
+#Swagger Documentation
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Django DRF Ecommerce",
+}
+
+
 REDOC_SETTINGS = {
     'LAZY_RENDERING': False,
 }
