@@ -22,12 +22,12 @@ class Order_ItemSerializer(serializers.ModelSerializer):
         model = Order_Item
         fields = '__all__'
 
-    def validate_pc(self, value):
+    def validate_component(self, value):
         if self.initial_data.get('order_type') == 'pc' and self.initial_data.get('component') is None:
             raise serializers.ValidationError("Component must be specified for 'pc' type order.")
         return value
 
-    def validate_component(self, value):
+    def validate_pc(self, value):
         if self.initial_data.get('order_type') == 'component' and self.initial_data.get('pc') is None:
-            raise serializers.ValidationError("Component must be specified for 'pc' type order.")
+            raise serializers.ValidationError("Pc must be specified for 'component' type order.")
         return value
