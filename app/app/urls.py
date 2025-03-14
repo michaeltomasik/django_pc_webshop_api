@@ -20,6 +20,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 urlpatterns = [
@@ -38,3 +39,5 @@ urlpatterns = [
     path('', include('pc_components.urls'))
 
 ]
+
+urlpatterns += staticfiles_urlpatterns()

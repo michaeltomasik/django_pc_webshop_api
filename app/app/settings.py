@@ -99,15 +99,15 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 # Get key from .env
 load_dotenv()
-DATABASE_ADMIN_PASSWORD = os.getenv('DATABASE_ADMIN_PASSWORD')
+DATABASE_ADMIN_PASSWORD_RENDER = os.getenv('DATABASE_ADMIN_PASSWORD_RENDER')  #DATABASE_ADMIN_PASSWORD_LOCAL = os.getenv('DATABASE_ADMIN_PASSWORD_LOCAL')
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "django_pc_shop_api",
-        "USER": "shop_api_admin",
-        "PASSWORD": DATABASE_ADMIN_PASSWORD,
-        "HOST": "localhost",
+        "ENGINE": "django.db.backends.postgresql",                             #django.db.backends.postgresql
+        "NAME": "Database_for_django_pc_webshop_api",                          #django_pc_shop_api
+        "USER": "database_for_django_pc_webshop_api_user",                     #shop_api_admin
+        "PASSWORD": DATABASE_ADMIN_PASSWORD_RENDER,                            #DATABASE_ADMIN_PASSWORD_LOCAL
+        "HOST": "dpg-cv9kbglumphs73a8e7eg-a.frankfurt-postgres.render.com",    #localhost
         "PORT": "5432",
     }
 }
@@ -174,8 +174,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
 STATIC_URL = '/static/'
+MEDIA_URL = 'media/'
+
 #STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT = '/share/static/'
 
