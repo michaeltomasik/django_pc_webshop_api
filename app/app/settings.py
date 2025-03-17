@@ -1,3 +1,4 @@
+print("start settings")
 """
 Django settings for app project.
 
@@ -37,7 +38,7 @@ CORS_ORIGIN_WHITELIST = []
 cors_allowed_host = None#  os.getenv('ALLOWED_HOST', 'http://*,https://*')
 if  cors_allowed_host is not None:
     CORS_ORIGIN_WHITELIST.extend(cors_allowed_host.split(','))
-
+print("pre installed apps")
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -58,6 +59,7 @@ INSTALLED_APPS = [
     'app.pc_components.apps.PcComponentsConfig',
     'app.users.apps.UsersConfig'
 ]
+print("post installed apps")
 
 MIDDLEWARE = [
     # CORS
@@ -72,9 +74,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+print("pre root url settings")
 ROOT_URLCONF = 'app.app.urls'
-
+print("post root url settings")
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -100,7 +102,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Get key from .env
 load_dotenv()
 DATABASE_ADMIN_PASSWORD_RENDER = os.getenv('DATABASE_ADMIN_PASSWORD_RENDER')  #DATABASE_ADMIN_PASSWORD_LOCAL = os.getenv('DATABASE_ADMIN_PASSWORD_LOCAL')
-
+print("pre database settings")
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",                             #django.db.backends.postgresql
@@ -111,7 +113,7 @@ DATABASES = {
         "PORT": "5432",
     }
 }
-
+print("post database settings")
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -182,3 +184,5 @@ STATIC_ROOT = '/share/static/'
 
 
 AUTH_USER_MODEL = 'users.User'
+
+print("end settings")
