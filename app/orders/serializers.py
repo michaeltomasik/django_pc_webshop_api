@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Order, Order_Item
-from pc_components.models import Pc, Component
+from app.pc_components.models import Pc, Component
 
 
 class OrderSerializer(serializers.ModelSerializer):
