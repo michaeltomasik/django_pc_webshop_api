@@ -40,7 +40,6 @@ urlpatterns = [
     print("post users urls"),
     path('', include('app.orders.urls')),
     path('', include('app.pc_components.urls'))
-
 ]
 
 urlpatterns += staticfiles_urlpatterns()
