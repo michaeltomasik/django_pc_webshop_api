@@ -1,4 +1,3 @@
-print("start settings")
 """
 Django settings for app project.
 
@@ -27,19 +26,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY','(n5=3!jpyt8_2ln5ni^d*0kj0*9t6nqkk6+l7y6_axy%d*rm8l')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG',True)
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = []
 allowed_host = os.getenv('ALLOWED_HOSTS', '*')
-if  allowed_host is not None:
+if allowed_host is not None:
     ALLOWED_HOSTS.extend(allowed_host.split(','))
 
 CORS_ORIGIN_ALLOW_ALL = os.getenv('CORS_ORIGIN_ALLOW_ALL', True)
 CORS_ORIGIN_WHITELIST = []
 cors_allowed_host = None#  os.getenv('ALLOWED_HOST', 'http://*,https://*')
-if  cors_allowed_host is not None:
+if cors_allowed_host is not None:
     CORS_ORIGIN_WHITELIST.extend(cors_allowed_host.split(','))
-print("pre installed apps")
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -60,7 +59,6 @@ INSTALLED_APPS = [
     'app.pc_components.apps.PcComponentsConfig',
     'app.users.apps.UsersConfig'
 ]
-print("post installed apps")
 
 MIDDLEWARE = [
     # CORS
@@ -68,16 +66,16 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Neu hinzufügen für statische Dateien
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-print("pre root url settings")
-ROOT_URLCONF = 'app.app.urls'
-print("post root url settings")
+
+ROOT_URLCONF = 'app.urls'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -103,7 +101,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Get key from .env
 load_dotenv()
 DATABASE_ADMIN_PASSWORD_RENDER = os.getenv('DATABASE_ADMIN_PASSWORD_RENDER')  #DATABASE_ADMIN_PASSWORD_LOCAL = os.getenv('DATABASE_ADMIN_PASSWORD_LOCAL')
-print("pre database settings")
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",                             #django.db.backends.postgresql
@@ -114,7 +112,6 @@ DATABASES = {
         "PORT": "5432",
     }
 }
-print("post database settings")
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -196,12 +193,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 STATIC_URL = '/static/'
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_ROOT = '/share/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
+# Zusätzliche Verzeichnisse für statische Dateien
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+# Whitenoise Konfiguration
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 AUTH_USER_MODEL = 'users.User'
-
-print("end settings")

@@ -9,6 +9,7 @@ Diese Dokumentation beschreibt alle notwendigen Schritte und Änderungen, um das
 4. [Anpassungen in den Einstellungen](#anpassungen-in-den-einstellungen)
 5. [Render-spezifische Dateien](#render-spezifische-dateien)
 6. [Deployment auf Render](#deployment-auf-render)
+7. [Fehlerbehebung](#fehlerbehebung)
 
 ## Vorbereitung
 
@@ -27,6 +28,7 @@ DATABASE_ADMIN_PASSWORD_RENDER=3WWF231BneQ5ryUFc2PE53EFtG3D1cCL
 SECRET_KEY=ein_sicherer_schlüssel
 DEBUG=False
 ALLOWED_HOSTS=*.render.com,deine-app-url.render.com
+PYTHON_PATH=/opt/render/project/src/app
 ```
 
 ### Änderungen an .gitignore
@@ -57,8 +59,10 @@ Erstelle eine `build.sh` Datei im Hauptverzeichnis des Projekts:
 set -o errexit
 
 pip install -r requirements.txt
-python app/manage.py collectstatic --no-input
-python app/manage.py migrate
+cd app
+python manage.py collectstatic --no-input
+python manage.py migrate
+cd ..
 ```
 
 ### Hinzufügen einer Procfile Datei
@@ -66,7 +70,7 @@ python app/manage.py migrate
 Erstelle eine `Procfile` Datei im Hauptverzeichnis:
 
 ```
-web: gunicorn --chdir app app.wsgi:application
+web: cd app && gunicorn app.wsgi:application
 ```
 
 ## Anpassungen in den Einstellungen
@@ -117,13 +121,34 @@ MIDDLEWARE = [
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 ```
 
-### wsgi.py korrigieren
+### wsgi.py überprüfen
 
-In `app/app/wsgi.py` sollte der richtige Pfad für die Einstellungen verwendet werden:
+Stelle sicher, dass `app/app/wsgi.py` den richtigen Pfad für die Einstellungen verwendet:
 
 ```python
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.app.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
 ```
+
+### manage.py überprüfen
+
+Stelle sicher, dass `app/manage.py` den richtigen Pfad für die Einstellungen verwendet:
+
+```python
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
+```
+
+### urls.py Pfade überprüfen
+
+Überprüfe in `app/app/urls.py` die Pfade zu den App-URLs und entferne print-Anweisungen:
+
+```python
+# App routes
+path('', include('app.users.urls')),
+path('', include('app.orders.urls')),
+path('', include('app.pc_components.urls'))
+```
+
+Du kannst die print-Anweisungen entfernen, da sie nur für Debugging-Zwecke gedacht sind.
 
 ## Render-spezifische Dateien
 
@@ -147,6 +172,8 @@ services:
         value: False
       - key: ALLOWED_HOSTS
         value: "*.render.com,django-pc-webshop-api.onrender.com"
+      - key: PYTHON_PATH
+        value: "/opt/render/project/src/app"
     autoDeploy: true
 ```
 
@@ -172,7 +199,53 @@ services:
 
 ## Fehlerbehebung
 
-- Überprüfe die Logs in der Render-Oberfläche bei Problemen
-- Stelle sicher, dass die Datenbank korrekt konfiguriert ist und verbunden werden kann
-- Überprüfe, ob `gunicorn` korrekt installiert und in den `requirements.txt` aufgeführt ist
-- Überprüfe die Einstellung des `WSGI_APPLICATION` in `settings.py` 
+### AttributeError: 'NoneType' object has no attribute 'resolve'
+
+Wenn du die Fehlermeldung `AttributeError: 'NoneType' object has no attribute 'resolve'` erhältst, ist das meistens ein Hinweis auf ein Problem mit den Modulpfaden. Folgende Maßnahmen können helfen:
+
+1. Überprüfe, ob in wsgi.py, settings.py und manage.py konsistente Pfade verwendet werden:
+   
+   Für app/app/wsgi.py:
+   ```python
+   os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
+   ```
+   
+   Für app/manage.py:
+   ```python
+   os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'app.settings')
+   ```
+
+2. Prüfe in der Render-Umgebung die korrekte Arbeitspfadstruktur, indem du in den Logs nachschaust, aus welchem Verzeichnis die Anwendung gestartet wird.
+
+3. Stelle sicher, dass der `PYTHONPATH` richtig gesetzt ist, damit Python die Module korrekt finden kann. In der render.yaml wurde hierfür bereits die Umgebungsvariable `PYTHON_PATH=/opt/render/project/src/app` hinzugefügt.
+
+4. Wenn der Fehler weiterhin besteht, füge im Build-Prozess einen Debug-Schritt ein, der die Verzeichnisstruktur und Modulpfade ausgibt:
+   ```
+   find /opt/render/project/src -type d | sort
+   echo $PYTHONPATH
+   ```
+
+5. Überprüfe auch, ob es Syntaxfehler in einer deiner URL-Dateien gibt. Manchmal können print-Anweisungen in den URLs-Dateien Probleme verursachen.
+
+### Weitere Debug-Tipps:
+
+1. Setze temporär `DEBUG=True` in den Render-Umgebungsvariablen, um detailliertere Fehlerberichte zu erhalten.
+
+2. Überprüfe die Log-Dateien auf Render für weitere Hinweise auf das Problem.
+
+3. Stelle sicher, dass alle App-Verzeichnisse eine korrekte `__init__.py` Datei enthalten, damit sie als Python-Module erkannt werden.
+
+4. Überprüfe, ob deine Datenbankverbindung funktioniert und die Migrationen erfolgreich ausgeführt werden.
+
+5. Füge einen einfachen URL-Pfad direkt in der app/app/urls.py hinzu, um zu testen, ob grundlegende Routing-Funktionen funktionieren:
+   ```python
+   from django.http import HttpResponse
+   
+   def hello_world(request):
+       return HttpResponse("Hello, world!")
+   
+   urlpatterns = [
+       # Bestehende URLs...
+       path('hello/', hello_world, name='hello_world'),
+   ]
+   ``` 

@@ -13,7 +13,6 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-print("start urls")
 from django.contrib import admin
 from django.urls import include, path, re_path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
@@ -22,26 +21,27 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.http import HttpResponse
 
+def hello_world(request):
+    return HttpResponse("Hello, world!")
 
 urlpatterns = [
+    # Test route
+    path('hello/', hello_world, name='hello_world'),
+    
     # Swagger paths
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
-
 
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     # App routes
-    print("pre users urls"),
     path('', include('app.users.urls')),
-    print("post users urls"),
     path('', include('app.orders.urls')),
     path('', include('app.pc_components.urls'))
 ]
 
 urlpatterns += staticfiles_urlpatterns()
-
-print("end urls")
