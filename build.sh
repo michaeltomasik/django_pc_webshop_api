@@ -7,7 +7,7 @@ pip install -r requirements.txt
 
 # Set environment variables
 export PYTHONPATH=/opt/render/project/src/app
-export DJANGO_SETTINGS_MODULE=settings
+export DJANGO_SETTINGS_MODULE=app.settings
 
 # Collect static files
 cd /opt/render/project/src/app
