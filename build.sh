@@ -6,13 +6,11 @@ set -o errexit
 pip install -r requirements.txt
 
 # Set environment variables
-export PYTHONPATH=/opt/render/project/src
-export DJANGO_SETTINGS_MODULE=app.app.settings
-
-# Change to the app directory
-cd app
+export PYTHONPATH=/opt/render/project/src/app
+export DJANGO_SETTINGS_MODULE=settings
 
 # Collect static files
+cd /opt/render/project/src/app
 python manage.py collectstatic --noinput
 
 # Apply database migrations
