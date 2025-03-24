@@ -100,18 +100,36 @@ WSGI_APPLICATION = 'wsgi.application'
 
 # Get key from .env
 load_dotenv()
-DATABASE_ADMIN_PASSWORD_RENDER = os.getenv('DATABASE_ADMIN_PASSWORD_RENDER')  #DATABASE_ADMIN_PASSWORD_LOCAL = os.getenv('DATABASE_ADMIN_PASSWORD_LOCAL')
+DATABASE_URL = os.getenv('DATABASE_URL')
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",                             #django.db.backends.postgresql
-        "NAME": "Database_for_django_pc_webshop_api",                          #django_pc_shop_api
-        "USER": "database_for_django_pc_webshop_api_user",                     #shop_api_admin
-        "PASSWORD": DATABASE_ADMIN_PASSWORD_RENDER,                            #DATABASE_ADMIN_PASSWORD_LOCAL
-        "HOST": "dpg-cv9kbglumphs73a8e7eg-a.frankfurt-postgres.render.com",    #localhost
-        "PORT": "5432",
+if DATABASE_URL:
+    # Parse database URL
+    db_url = DATABASE_URL.replace('postgres://', '').replace('postgresql://', '')
+    db_user, db_pass = db_url.split(':')
+    db_host, db_name = db_pass.split('@')[1].split('/')
+    
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": db_name,
+            "USER": db_user,
+            "PASSWORD": db_pass.split('@')[0],
+            "HOST": db_host,
+            "PORT": "5432",
+        }
     }
-}
+else:
+    # Fallback für lokale Entwicklung
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "django_pc_shop_api",
+            "USER": "shop_api_admin",
+            "PASSWORD": os.getenv('DATABASE_ADMIN_PASSWORD_LOCAL'),
+            "HOST": "localhost",
+            "PORT": "5432",
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
