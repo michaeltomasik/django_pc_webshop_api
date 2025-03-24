@@ -55,9 +55,9 @@ INSTALLED_APPS = [
     'corsheaders',
 
     #OWN APPS
-    'app.orders.apps.OrdersConfig',
-    'app.pc_components.apps.PcComponentsConfig',
-    'app.users.apps.UsersConfig'
+    'orders.apps.OrdersConfig',
+    'pc_components.apps.PcComponentsConfig',
+    'users.apps.UsersConfig'
 ]
 
 MIDDLEWARE = [
