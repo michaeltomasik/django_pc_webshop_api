@@ -3,6 +3,7 @@ services:
     name: django-pc-webshop-api
     env: python
     buildCommand: ./build.sh
+    preDeployCommand: "python manage.py migrate"
     startCommand: cd app && gunicorn app.wsgi:application
     envVars:
       - key: DATABASE_ADMIN_PASSWORD_RENDER
