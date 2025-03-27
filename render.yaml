@@ -2,17 +2,20 @@ services:
   - type: web
     name: django-pc-webshop-api
     env: python
-    buildCommand: ./build.sh
-    startCommand: cd app && gunicorn app.wsgi:application
+    build:
+      cwd: app  # Tells Render to run everything from inside the 'app' folder
+    buildCommand: |
+      pip install -r ../requirements.txt
+      python manage.py migrate
+      python manage.py collectstatic --noinput
+    startCommand: gunicorn app.wsgi:application
     envVars:
-      - key: DATABASE_ADMIN_PASSWORD_RENDER
-        sync: false
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
         value: False
       - key: ALLOWED_HOSTS
-        value: "*.render.com,django-pc-webshop-api.onrender.com"
-      - key: PYTHON_PATH
-        value: "/opt/render/project/src/app"
-    autoDeploy: true 
+        value: "django-pc-webshop-api.onrender.com,.render.com"
+      - key: DATABASE_ADMIN_PASSWORD_RENDER
+        sync: false
+    autoDeploy: true
