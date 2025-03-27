@@ -6,8 +6,6 @@ services:
     preDeployCommand: "python manage.py migrate"
     startCommand: cd app && gunicorn app.wsgi:application
     envVars:
-      - key: DATABASE_ADMIN_PASSWORD_RENDER
-        sync: false
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
